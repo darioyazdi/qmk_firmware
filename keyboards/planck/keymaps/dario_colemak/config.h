@@ -20,19 +20,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
- // place overrides here
-#define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
-                              SONG(COLEMAK_SOUND), \
-                              SONG(DVORAK_SOUND) \
-                            }
+#ifdef AUDIO_ENABLE
+    #define STARTUP_SONG SONG(PLANCK_SOUND)
+    // #define STARTUP_SONG SONG(NO_SOUND)
 
-/* Use I2C or Serial, not both */
-// #define USE_SERIAL
-#define USE_I2C
+    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
+                                  SONG(COLEMAK_SOUND), \
+                                  SONG(DVORAK_SOUND) \
+                                }
+#endif
 
-/* Select hand configuration */
-#define MASTER_LEFT
-// #define MASTER_RIGHT
-// #define EE_HANDS
-
+#define MIDI_BASIC
+#define ENCODER_RESOLUTION 4
 #define TAPPING_TERM 140
