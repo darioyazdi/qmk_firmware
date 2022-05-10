@@ -20,16 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#ifdef AUDIO_ENABLE
-    #define STARTUP_SONG SONG(PLANCK_SOUND)
-    // #define STARTUP_SONG SONG(NO_SOUND)
+// #define MIDI_BASIC
+// #define ENCODER_RESOLUTION 4
 
-    #define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND), \
-                                  SONG(COLEMAK_SOUND), \
-                                  SONG(DVORAK_SOUND) \
-                                }
-#endif
-
-#define MIDI_BASIC
-#define ENCODER_RESOLUTION 4
 #define TAPPING_TERM 140
+#define TAPPING_TOGGLE 2

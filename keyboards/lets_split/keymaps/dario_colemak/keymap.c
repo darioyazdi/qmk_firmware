@@ -4,11 +4,38 @@
 #define _NUMPAD 1
 #define _ARROW 2
 
+bool mouse_jiggle_mode = false;  
+uint16_t counter = 0; 
+
 enum custom_keycodes {
   COLEMAK = SAFE_RANGE,
   NUMPAD,
   ARROW,
+  MOUSEJIGGLERMACRO,
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case MOUSEJIGGLERMACRO:
+      if (record->event.pressed) {
+        counter = 0; 
+        mouse_jiggle_mode = !mouse_jiggle_mode;
+      }
+      break;
+  }
+  return true;
+}
+
+void matrix_scan_user(void) {
+  if (mouse_jiggle_mode && counter < 4) {
+    tap_code(KC_MS_UP);
+    tap_code(KC_MS_DOWN);
+    tap_code(KC_MS_LEFT);
+    tap_code(KC_MS_RIGHT);
+  }
+  counter++; 
+  counter &= 0xFFFF;
+}
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_COLEMAK] = LAYOUT_ortho_4x12(
@@ -22,10 +49,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_LBRC , KC_LPRN , KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_MINS , KC_1    , KC_2 , KC_3    , KC_RPRN , KC_RBRC  ,
     KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_LALT , KC_TRNS , KC_TRNS , KC_TRNS , KC_0 , KC_TRNS , KC_TRNS , KC_TRNS) ,
   [_ARROW] = LAYOUT_ortho_4x12(
-    KC_TRNS      , KC_TRNS , KC_TRNS      , KC_TRNS     , KC_WH_U    , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , RESET   , KC_TRNS    ,
-    KC_TRNS      , KC_TRNS , KC_TRNS      , KC_MS_BTN2  , KC_MS_BTN1 , KC_TRNS , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT , KC_TRNS , KC_TRNS    ,
-    KC_TRNS      , KC_TRNS , KC_TRNS      , KC_TRNS     , KC_WH_D    , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS    ,
-    KC_TRNS      , KC_TRNS , KC_TRNS      , TO(_COLEMAK), KC_TRNS    , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS)};
+    KC_TRNS      , KC_TRNS , KC_TRNS      , KC_TRNS           , KC_WH_U    , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , RESET   , KC_TRNS    ,
+    KC_TRNS      , KC_TRNS , KC_TRNS      , KC_MS_BTN2        , KC_MS_BTN1 , KC_TRNS , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT , KC_TRNS , KC_TRNS    ,
+    KC_TRNS      , KC_TRNS , KC_TRNS      , MOUSEJIGGLERMACRO , KC_WH_D    , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS    ,
+    KC_TRNS      , KC_TRNS , KC_TRNS      , TO(_COLEMAK)      , KC_TRNS    , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS)};
 
 // layer_state_t layer_state_set_user(layer_state_t state) {
 //   return update_tri_layer_state(state, _COLEMAK, _NUMPAD, _ARROW);
