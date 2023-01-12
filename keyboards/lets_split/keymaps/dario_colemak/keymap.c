@@ -14,10 +14,28 @@ enum custom_keycodes {
   MOUSEJIGGLERMACRO,
 };
 
+static void jiggle(void) {
+  static uint8_t direction = 0; 
+
+  switch (direction % 4 ) {
+    case 0: tap_code(KC_MS_UP);
+    case 1: tap_code(KC_MS_LEFT);
+    case 2: tap_code(KC_MS_DOWN);
+    default: tap_code(KC_MS_RIGHT);
+  }
+  direction++; 
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MOUSEJIGGLERMACRO:
       if (record->event.pressed) {
+        if (!mouse_jiggle_mode) {
+          for (uint8_t i = 0; i<8; i++) {
+            jiggle();
+          }
+        }
+
         counter = 0; 
         mouse_jiggle_mode = !mouse_jiggle_mode;
       }
@@ -27,11 +45,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void matrix_scan_user(void) {
-  if (mouse_jiggle_mode && counter < 4) {
-    tap_code(KC_MS_UP);
-    tap_code(KC_MS_DOWN);
-    tap_code(KC_MS_LEFT);
-    tap_code(KC_MS_RIGHT);
+  if (mouse_jiggle_mode && counter < 2) {
+    jiggle();
+    counter += 3;
   }
   counter++; 
   counter &= 0xFFFF;
