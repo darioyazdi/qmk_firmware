@@ -52,7 +52,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         We're only interested in overriding the tap behavior
         in a certain cicumstance. The hold behavior can stay the same.
         */
-        if (record->event.pressed && record->tap.count > 0) {
+        if (record->event.pressed) {
             // Detect right Shift
             if (get_mods() & MOD_BIT(KC_RGUI)) {
                 // temporarily disable right Shift
@@ -75,7 +75,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
        We're only interested in overriding the tap behavior
        in a certain cicumstance. The hold behavior can stay the same.
        */
-       if (record->event.pressed && record->tap.count > 0) {
+       if (record->event.pressed) {
            // Detect right Shift
            if (get_mods() & MOD_BIT(KC_RGUI)) {
                // temporarily disable right Shift
