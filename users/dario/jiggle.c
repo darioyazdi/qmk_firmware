@@ -35,3 +35,13 @@ void jiggle_toggle(void) {
   counter = 0;
   mouse_jiggle_mode = !mouse_jiggle_mode;
 }
+
+bool process_jiggle(uint16_t keycode, keyrecord_t* record) {
+#ifdef JIGGLE_KEYCODE
+  if keycode == JIGGLE_KEYCODE & record->event.pressed {
+    jiggle_toggle()
+  }
+#endif
+
+  return true;
+}

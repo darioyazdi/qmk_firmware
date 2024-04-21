@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+
 #include "users/dario/achordion.h"
 #include "users/dario/jiggle.h"
 
@@ -9,68 +10,16 @@
 #define _EXTRA 4
 
 enum custom_keycodes {
-  COLEMAK = SAFE_RANGE,
-  NUMPAD,
-  SYM,
-  MOUSE,
-  EXTRA,
-  MS_TO_JIG,
+  MS_TO_JIG = SAFE_RANGE,
 };
 
+#define JIGGLE_KEYCODE MS_TO_JIG
+
+// EN,EM,ST,TH need hrm false activates on roll
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-    case MS_TO_JIG:
-      if (record->event.pressed) {
-        jiggle_toggle();
-      }
-      break;
-    case RALT_T(KC_N):
-        // disable home row mod for certain chords
+  if (!process_jiggle(keycode, record)) { return false; }
+  if (!process_achordion(keycode, record)) { return false; }
 
-        /*
-        Detect the tap.
-        We're only interested in overriding the tap behavior
-        in a certain cicumstance. The hold behavior can stay the same.
-        */
-        if (record->event.pressed) {
-            // Detect right Shift
-            if (get_mods() & MOD_BIT(KC_RGUI)) {
-                // temporarily disable right Shift
-                // so that we can send KC_E and KC_N
-                // without Shift on.
-                unregister_mods(MOD_BIT(KC_RGUI));
-                tap_code(KC_E);
-                tap_code(KC_N);
-                // restore the mod state
-                add_mods(MOD_BIT(KC_RGUI));
-                // to prevent QMK from processing RCTL_T(KC_N) as usual in our special case
-                return false;
-            }
-        }
-    case KC_M:
-       // disable home row mod for certain chords
-
-       /*
-       Detect the tap.
-       We're only interested in overriding the tap behavior
-       in a certain cicumstance. The hold behavior can stay the same.
-       */
-       if (record->event.pressed) {
-           // Detect right Shift
-           if (get_mods() & MOD_BIT(KC_RGUI)) {
-               // temporarily disable right Shift
-               // so that we can send KC_E and KC_N
-               // without Shift on.
-               unregister_mods(MOD_BIT(KC_RGUI));
-               tap_code(KC_E);
-               tap_code(KC_M);
-               // restore the mod state
-               add_mods(MOD_BIT(KC_RGUI));
-               // to prevent QMK from processing RCTL_T(KC_N) as usual in our special case
-               return false;
-           }
-       }
-  }
   return true;
 }
 
@@ -106,7 +55,3 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS      , KC_TRNS       , KC_TRNS      , KC_TRNS     , KC_TRNS    , KC_TRNS ,                        KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS  , KC_TRNS    ,
     KC_TRNS      , KC_TRNS       , KC_TRNS      , KC_TRNS     , KC_TRNS    , KC_TRNS ,                        KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS , KC_TRNS  , KC_TRNS),
 };
-
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//   return update_tri_layer_state(state, _COLEMAK, _NUMPAD, _ARROW);
-// }
