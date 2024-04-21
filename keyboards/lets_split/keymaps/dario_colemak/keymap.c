@@ -1,4 +1,6 @@
 #include QMK_KEYBOARD_H
+#include "users/dario/achordion.h"
+#include "users/dario/jiggle.h"
 
 #define _COLEMAK 0
 #define _NUMPAD 1
@@ -17,18 +19,6 @@ enum custom_keycodes {
   EXTRA,
   MS_TO_JIG,
 };
-
-static void jiggle(void) {
-  static uint8_t direction = 0;
-
-  switch (direction % 4 ) {
-    case 0: tap_code(KC_MS_UP);
-    case 1: tap_code(KC_MS_LEFT);
-    case 2: tap_code(KC_MS_DOWN);
-    default: tap_code(KC_MS_RIGHT);
-  }
-  direction++;
-}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
