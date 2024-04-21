@@ -8,9 +8,6 @@
 #define _MOUSE 3
 #define _EXTRA 4
 
-bool mouse_jiggle_mode = false;
-uint16_t counter = 0;
-
 enum custom_keycodes {
   COLEMAK = SAFE_RANGE,
   NUMPAD,
@@ -24,14 +21,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case MS_TO_JIG:
       if (record->event.pressed) {
-        if (!mouse_jiggle_mode) {
-          for (uint8_t i = 0; i<8; i++) {
-            jiggle();
-          }
-        }
-
-        counter = 0;
-        mouse_jiggle_mode = !mouse_jiggle_mode;
+        jiggle_toggle();
       }
       break;
     case RALT_T(KC_N):
@@ -85,12 +75,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 void matrix_scan_user(void) {
-  if (mouse_jiggle_mode && counter < 2) {
-    jiggle();
-    counter += 3;
-  }
-  counter++;
-  counter &= 0xFFFF;
+  jiggle_task();
+  achordion_task();
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
