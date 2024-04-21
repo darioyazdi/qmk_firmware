@@ -28,6 +28,22 @@ void matrix_scan_user(void) {
   achordion_task();
 }
 
+bool achordion_chord(
+    uint16_t tap_hold_keycode,
+    keyrecord_t* tap_hold_record,
+    uint16_t other_keycode,
+    keyrecord_t* other_record
+) {
+
+  // always resolve hold for shift
+  if (other_keycode == KC_LSFT) {
+    return true;
+  }
+
+  // Default achordion behavior
+  return achordion_opposite_hands(tap_hold_record, other_record);
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_COLEMAK] = LAYOUT_ortho_4x12(
     KC_ESC          , KC_Q       , KC_W         , KC_F        , KC_P           , KC_G          ,              KC_J    , KC_L         , KC_U        , KC_Y   , KC_SCLN , KC_BSPC ,
