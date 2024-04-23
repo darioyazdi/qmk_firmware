@@ -13,7 +13,9 @@ enum custom_keycodes {
   MS_TO_JIG = SAFE_RANGE,
 };
 
-#define JIGGLE_KEYCODE MS_TO_JIG
+void keyboard_post_init_user() {
+  register_keycode(MS_TO_JIG);
+}
 
 // EN,EM,ST,TH need hrm false activates on roll
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -35,8 +37,8 @@ bool achordion_chord(
     keyrecord_t* other_record
 ) {
 
-  // always resolve hold for shift
-  if (other_keycode == KC_LSFT) {
+  // resolve hold for non-alpha
+  if (other_keycode > KC_Z) {
     return true;
   }
 

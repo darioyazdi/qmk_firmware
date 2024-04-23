@@ -1,6 +1,7 @@
 #include "quantum.h"
 #include "jiggle.h"
 
+static uint16_t jiggle_keycode = 0;
 static bool mouse_jiggle_mode = false;
 static uint16_t counter = 0;
 
@@ -37,11 +38,14 @@ void jiggle_toggle(void) {
 }
 
 bool process_jiggle(uint16_t keycode, keyrecord_t* record) {
-#ifdef JIGGLE_KEYCODE
-  if keycode == JIGGLE_KEYCODE & record->event.pressed {
-    jiggle_toggle()
+  if ((jiggle_keycode > 0) & (keycode == jiggle_keycode) & (record->event.pressed)) {
+    jiggle_toggle();
+    return false;
   }
-#endif
 
   return true;
+}
+
+void register_keycode(uint16_t keycode) {
+  jiggle_keycode = keycode;
 }
