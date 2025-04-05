@@ -20,8 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-// #define MIDI_BASIC
-// #define ENCODER_RESOLUTION 4
-
 #define TAPPING_TERM 140
 #define TAPPING_TOGGLE 2
+#define QUICK_TAP_TERM 0
+#define PERMISSIVE_HOLD
